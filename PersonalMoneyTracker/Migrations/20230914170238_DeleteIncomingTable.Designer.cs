@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalMoneyTracker;
 
@@ -10,16 +11,18 @@ using PersonalMoneyTracker;
 namespace PersonalMoneyTracker.Migrations
 {
     [DbContext(typeof(AppContext))]
-    partial class AppContextModelSnapshot : ModelSnapshot
+    [Migration("20230914170238_DeleteIncomingTable")]
+    partial class DeleteIncomingTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("PersonalMoneyTracker.Models.Transaction", b =>
+            modelBuilder.Entity("PersonalMoneyTracker.Models.Payment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,9 +41,6 @@ namespace PersonalMoneyTracker.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("TransactionTypeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -51,16 +51,14 @@ namespace PersonalMoneyTracker.Migrations
 
                     b.HasIndex("PaymentCategoryId");
 
-                    b.HasIndex("TransactionTypeId");
-
                     b.HasIndex("UserId");
 
                     b.HasIndex("WalletId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("PersonalMoneyTracker.Models.TransactionCategory", b =>
+            modelBuilder.Entity("PersonalMoneyTracker.Models.PaymentCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,35 +69,14 @@ namespace PersonalMoneyTracker.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("varchar(128)");
 
-                    b.Property<int>("TransactionTypeId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TransactionTypeId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("TransactionCategories", (string)null);
-                });
-
-            modelBuilder.Entity("PersonalMoneyTracker.Models.TransactionType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("varchar(64)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TransactionTypes");
+                    b.ToTable("PaymentCategories");
                 });
 
             modelBuilder.Entity("PersonalMoneyTracker.Models.User", b =>
@@ -150,17 +127,11 @@ namespace PersonalMoneyTracker.Migrations
                     b.ToTable("Wallets");
                 });
 
-            modelBuilder.Entity("PersonalMoneyTracker.Models.Transaction", b =>
+            modelBuilder.Entity("PersonalMoneyTracker.Models.Payment", b =>
                 {
-                    b.HasOne("PersonalMoneyTracker.Models.TransactionCategory", "PaymentCategory")
+                    b.HasOne("PersonalMoneyTracker.Models.PaymentCategory", "PaymentCategory")
                         .WithMany("Payments")
                         .HasForeignKey("PaymentCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PersonalMoneyTracker.Models.TransactionType", "TransactionType")
-                        .WithMany("Transactions")
-                        .HasForeignKey("TransactionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -178,28 +149,18 @@ namespace PersonalMoneyTracker.Migrations
 
                     b.Navigation("PaymentCategory");
 
-                    b.Navigation("TransactionType");
-
                     b.Navigation("User");
 
                     b.Navigation("Wallet");
                 });
 
-            modelBuilder.Entity("PersonalMoneyTracker.Models.TransactionCategory", b =>
+            modelBuilder.Entity("PersonalMoneyTracker.Models.PaymentCategory", b =>
                 {
-                    b.HasOne("PersonalMoneyTracker.Models.TransactionType", "TransactionType")
-                        .WithMany("TransactionCategories")
-                        .HasForeignKey("TransactionTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("PersonalMoneyTracker.Models.User", "User")
                         .WithMany("PaymentCategories")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("TransactionType");
 
                     b.Navigation("User");
                 });
@@ -215,16 +176,9 @@ namespace PersonalMoneyTracker.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PersonalMoneyTracker.Models.TransactionCategory", b =>
+            modelBuilder.Entity("PersonalMoneyTracker.Models.PaymentCategory", b =>
                 {
                     b.Navigation("Payments");
-                });
-
-            modelBuilder.Entity("PersonalMoneyTracker.Models.TransactionType", b =>
-                {
-                    b.Navigation("TransactionCategories");
-
-                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("PersonalMoneyTracker.Models.User", b =>

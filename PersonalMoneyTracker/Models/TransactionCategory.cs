@@ -1,8 +1,8 @@
 ﻿namespace PersonalMoneyTracker.Models
 {
-    public class Wallet
+    public class TransactionCategory
     {
-        public Wallet()
+        public TransactionCategory()
         {
             Payments = new List<Transaction>();
         }
@@ -11,5 +11,7 @@
         public int UserId { get; set; }
         public User User { get; set; }
         public IList<Transaction> Payments { get; set; }
+        public TransactionType TransactionType { get; set; }
+        public int TransactionTypeId { get; set; }
     }
 }
