@@ -12,16 +12,11 @@ namespace PersonalMoneyTracker
         public DbSet<Transaction> Payments { get; set; }
         public DbSet<TransactionType> TransactionTypes { get; set; }
 
-        private readonly IConfiguration _config;
-        public AppContext(IConfiguration config)
-        {
-            _config = config;
-        }
-
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL(_config["ConnectionStrings:Url"]);
+            var connectionString = @"Server=localhost;Port=3306;Database=Personal_Money_Tracker;Uid=root;Pwd=testpassword;";
+            optionsBuilder.UseMySQL(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
