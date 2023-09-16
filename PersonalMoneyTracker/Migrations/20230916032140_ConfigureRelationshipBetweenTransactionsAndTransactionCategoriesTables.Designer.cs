@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalMoneyTracker;
 
@@ -10,9 +11,11 @@ using PersonalMoneyTracker;
 namespace PersonalMoneyTracker.Migrations
 {
     [DbContext(typeof(AppContext))]
-    partial class AppContextModelSnapshot : ModelSnapshot
+    [Migration("20230916032140_ConfigureRelationshipBetweenTransactionsAndTransactionCategoriesTables")]
+    partial class ConfigureRelationshipBetweenTransactionsAndTransactionCategoriesTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +60,7 @@ namespace PersonalMoneyTracker.Migrations
 
                     b.HasIndex("WalletId");
 
-                    b.ToTable("Transactions", (string)null);
+                    b.ToTable("Transactions");
                 });
 
             modelBuilder.Entity("PersonalMoneyTracker.Models.TransactionCategory", b =>
@@ -83,7 +86,7 @@ namespace PersonalMoneyTracker.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TransactionCategories", (string)null);
+                    b.ToTable("TransactionCategories");
                 });
 
             modelBuilder.Entity("PersonalMoneyTracker.Models.TransactionType", b =>
@@ -99,7 +102,7 @@ namespace PersonalMoneyTracker.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TransactionTypes", (string)null);
+                    b.ToTable("TransactionTypes");
                 });
 
             modelBuilder.Entity("PersonalMoneyTracker.Models.User", b =>
@@ -126,7 +129,7 @@ namespace PersonalMoneyTracker.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("PersonalMoneyTracker.Models.Wallet", b =>
@@ -147,7 +150,7 @@ namespace PersonalMoneyTracker.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Wallets", (string)null);
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("PersonalMoneyTracker.Models.Transaction", b =>

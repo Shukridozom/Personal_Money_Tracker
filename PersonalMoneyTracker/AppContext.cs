@@ -8,8 +8,8 @@ namespace PersonalMoneyTracker
 
         public DbSet<User> Users { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
-        public DbSet<TransactionCategory> PaymentCategories { get; set; }
-        public DbSet<Transaction> Payments { get; set; }
+        public DbSet<TransactionCategory> TransactionCategories { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionType> TransactionTypes { get; set; }
 
 
@@ -41,43 +41,39 @@ namespace PersonalMoneyTracker
 
 
             modelBuilder.Entity<User>()
-                .HasMany(u => u.PaymentCategories)
-                .WithOne(i => i.User)
-                .HasForeignKey(i => i.UserId);
+                .HasMany(u => u.TransactionCategories)
+                .WithOne(tc => tc.User)
+                .HasForeignKey(tc => tc.UserId);
 
 
             modelBuilder.Entity<Wallet>()
                 .Property(w => w.Name)
                 .HasMaxLength(128);
 
-            modelBuilder.Entity<TransactionCategory>()
-                .ToTable("TransactionCategories");
 
             modelBuilder.Entity<TransactionCategory>()
                 .Property(i => i.Name)
                 .HasMaxLength(128);
 
-            modelBuilder.Entity<Transaction>()
-                .ToTable("Transactions");
 
             modelBuilder.Entity<Transaction>()
                 .Property(p => p.Reason)
                 .HasMaxLength(255);
 
             modelBuilder.Entity<Transaction>()
-                .HasOne(p => p.User)
-                .WithMany(u => u.Payments)
-                .HasForeignKey(p => p.UserId);
+                .HasOne(t => t.User)
+                .WithMany(u => u.Transactions)
+                .HasForeignKey(t => t.UserId);
 
             modelBuilder.Entity<Transaction>()
-                .HasOne(p => p.Wallet)
-                .WithMany(w => w.Payments)
-                .HasForeignKey(p => p.WalletId);
+                .HasOne(t => t.Wallet)
+                .WithMany(w => w.Transactions)
+                .HasForeignKey(t => t.WalletId);
 
             modelBuilder.Entity<Transaction>()
-                .HasOne(p => p.PaymentCategory)
-                .WithMany(pc => pc.Payments)
-                .HasForeignKey(p => p.PaymentCategoryId);
+                .HasOne(t => t.TransactionCategory)
+                .WithMany(tc => tc.Transactions)
+                .HasForeignKey(t => t.TransactionCategoryId);
 
 
             modelBuilder.Entity<TransactionType>()

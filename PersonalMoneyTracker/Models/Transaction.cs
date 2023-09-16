@@ -10,8 +10,8 @@
         public User User { get; set; }
         public int WalletId { get; set; }
         public Wallet Wallet { get; set; }
-        public int PaymentCategoryId { get; set; }
-        public TransactionCategory PaymentCategory { get; set; }
+        public int TransactionCategoryId { get; set; }
+        public TransactionCategory TransactionCategory { get; set; }
         public TransactionType TransactionType { get; set; }
         public int TransactionTypeId { get; set; }
 
