@@ -4,7 +4,7 @@
     {
         public User()
         {
-            Wallets= new List<Wallet>();
+            Wallets = new List<Wallet>();
             TransactionCategories = new List<TransactionCategory>();
             Transactions = new List<Transaction>();
         }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalMoneyTracker;
 
@@ -10,9 +11,11 @@ using PersonalMoneyTracker;
 namespace PersonalMoneyTracker.Migrations
 {
     [DbContext(typeof(AppContext))]
-    partial class AppContextModelSnapshot : ModelSnapshot
+    [Migration("20230916091650_CreateCompositeIndexForTransactionCategoriesTable")]
+    partial class CreateCompositeIndexForTransactionCategoriesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,15 +198,7 @@ namespace PersonalMoneyTracker.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PersonalMoneyTracker.Models.User", "User")
-                        .WithMany("TransactionCategories")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("TransactionType");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PersonalMoneyTracker.Models.Wallet", b =>
@@ -231,8 +226,6 @@ namespace PersonalMoneyTracker.Migrations
 
             modelBuilder.Entity("PersonalMoneyTracker.Models.User", b =>
                 {
-                    b.Navigation("TransactionCategories");
-
                     b.Navigation("Transactions");
 
                     b.Navigation("Wallets");

@@ -50,11 +50,18 @@ namespace PersonalMoneyTracker
                 .Property(w => w.Name)
                 .HasMaxLength(128);
 
+            modelBuilder.Entity<Wallet>()
+                .HasIndex(w => new { w.UserId, w.Name })
+                .IsUnique();
+
 
             modelBuilder.Entity<TransactionCategory>()
                 .Property(i => i.Name)
                 .HasMaxLength(128);
 
+            modelBuilder.Entity<TransactionCategory>()
+                .HasIndex(tc => new { tc.UserId, tc.TransactionTypeId, tc.Name })
+                .IsUnique();
 
             modelBuilder.Entity<Transaction>()
                 .Property(p => p.Reason)
