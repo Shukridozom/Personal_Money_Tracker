@@ -68,12 +68,14 @@ namespace PersonalMoneyTracker
             modelBuilder.Entity<Transaction>()
                 .HasOne(t => t.Wallet)
                 .WithMany(w => w.Transactions)
-                .HasForeignKey(t => t.WalletId);
+                .HasForeignKey(t => t.WalletId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Transaction>()
                 .HasOne(t => t.TransactionCategory)
                 .WithMany(tc => tc.Transactions)
-                .HasForeignKey(t => t.TransactionCategoryId);
+                .HasForeignKey(t => t.TransactionCategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             modelBuilder.Entity<TransactionType>()
@@ -83,12 +85,14 @@ namespace PersonalMoneyTracker
             modelBuilder.Entity<TransactionType>()
                 .HasMany(tt => tt.Transactions)
                 .WithOne(t => t.TransactionType)
-                .HasForeignKey(t => t.TransactionTypeId);
+                .HasForeignKey(t => t.TransactionTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<TransactionType>()
                 .HasMany(tt => tt.TransactionCategories)
                 .WithOne(tc => tc.TransactionType)
-                .HasForeignKey(tc => tc.TransactionTypeId);
+                .HasForeignKey(tc => tc.TransactionTypeId)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

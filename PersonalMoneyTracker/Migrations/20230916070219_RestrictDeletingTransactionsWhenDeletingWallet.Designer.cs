@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalMoneyTracker;
 
@@ -10,9 +11,11 @@ using PersonalMoneyTracker;
 namespace PersonalMoneyTracker.Migrations
 {
     [DbContext(typeof(AppContext))]
-    partial class AppContextModelSnapshot : ModelSnapshot
+    [Migration("20230916070219_RestrictDeletingTransactionsWhenDeletingWallet")]
+    partial class RestrictDeletingTransactionsWhenDeletingWallet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,13 +158,13 @@ namespace PersonalMoneyTracker.Migrations
                     b.HasOne("PersonalMoneyTracker.Models.TransactionCategory", "TransactionCategory")
                         .WithMany("Transactions")
                         .HasForeignKey("TransactionCategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PersonalMoneyTracker.Models.TransactionType", "TransactionType")
                         .WithMany("Transactions")
                         .HasForeignKey("TransactionTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PersonalMoneyTracker.Models.User", "User")
@@ -190,7 +193,7 @@ namespace PersonalMoneyTracker.Migrations
                     b.HasOne("PersonalMoneyTracker.Models.TransactionType", "TransactionType")
                         .WithMany("TransactionCategories")
                         .HasForeignKey("TransactionTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PersonalMoneyTracker.Models.User", "User")
