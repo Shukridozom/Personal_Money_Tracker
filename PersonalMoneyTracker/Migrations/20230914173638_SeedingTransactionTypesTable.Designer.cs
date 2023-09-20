@@ -10,7 +10,7 @@ using PersonalMoneyTracker;
 
 namespace PersonalMoneyTracker.Migrations
 {
-    [DbContext(typeof(AppContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20230914173638_SeedingTransactionTypesTable")]
     partial class SeedingTransactionTypesTable
     {

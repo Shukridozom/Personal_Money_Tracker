@@ -3,7 +3,7 @@ using PersonalMoneyTracker.Models;
 
 namespace PersonalMoneyTracker
 {
-    public class AppContext : DbContext
+    public class AppDbContext : DbContext
     {
 
         public DbSet<User> Users { get; set; }

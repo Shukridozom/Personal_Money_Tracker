@@ -9,7 +9,7 @@ using PersonalMoneyTracker;
 
 namespace PersonalMoneyTracker.Migrations
 {
-    [DbContext(typeof(AppContext))]
+    [DbContext(typeof(AppDbContext))]
     partial class AppContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

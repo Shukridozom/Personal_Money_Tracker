@@ -10,7 +10,7 @@ using PersonalMoneyTracker;
 
 namespace PersonalMoneyTracker.Migrations
 {
-    [DbContext(typeof(AppContext))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20230913185342_ConfigureRelationshipBetweenUsersAndIncomeCategoriesTable")]
     partial class ConfigureRelationshipBetweenUsersAndIncomeCategoriesTable
     {

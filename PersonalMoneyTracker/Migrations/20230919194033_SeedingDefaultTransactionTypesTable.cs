@@ -16,7 +16,7 @@ namespace PersonalMoneyTracker.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            using (var context = new AppContext())
+            using (var context = new AppDbContext())
             {
                 transactionTypeId_Income = context.TransactionTypes.Single(tc => tc.Name == "Income").Id;
                 transactionTypeId_Payment = context.TransactionTypes.Single(tc => tc.Name == "Payment").Id;
