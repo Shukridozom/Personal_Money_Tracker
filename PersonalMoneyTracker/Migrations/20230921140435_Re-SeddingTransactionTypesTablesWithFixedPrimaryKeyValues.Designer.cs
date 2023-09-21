@@ -11,7 +11,7 @@ using PersonalMoneyTracker;
 namespace PersonalMoneyTracker.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230919193727_Re-SeddingTransactionTypesTablesWithFixedPrimaryKeyValues")]
+    [Migration("20230921140435_Re-SeddingTransactionTypesTablesWithFixedPrimaryKeyValues")]
     partial class ReSeddingTransactionTypesTablesWithFixedPrimaryKeyValues
     {
         /// <inheritdoc />
