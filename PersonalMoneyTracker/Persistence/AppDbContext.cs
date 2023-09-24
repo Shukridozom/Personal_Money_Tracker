@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PersonalMoneyTracker.Models;
+using PersonalMoneyTracker.Core.Models;
 
-namespace PersonalMoneyTracker
+namespace PersonalMoneyTracker.Persistence
 {
     public class AppDbContext : DbContext
     {
