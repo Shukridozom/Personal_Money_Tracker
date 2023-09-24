@@ -1,4 +1,4 @@
-﻿namespace PersonalMoneyTracker.Models
+﻿namespace PersonalMoneyTracker.Core.Models
 {
     public class User
     {
