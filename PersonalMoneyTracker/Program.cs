@@ -11,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork>(s => new UnitOfWork(new AppDbContext()));
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
