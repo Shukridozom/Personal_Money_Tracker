@@ -5,7 +5,6 @@ namespace PersonalMoneyTracker.Dtos
 {
     public class UserLoginDto
     {
-        public int? Id { get; set; }
         [Required]
         [MinLength(6)]
         [MaxLength(255)]
