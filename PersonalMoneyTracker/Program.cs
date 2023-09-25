@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using PersonalMoneyTracker.Core.Repositories;
 using PersonalMoneyTracker.Persistence;
 
@@ -12,6 +13,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork>(s => new UnitOfWork(new AppDbContext()));
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(x => { x.LoginPath = "/login"; });
 
 var app = builder.Build();
 
