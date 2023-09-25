@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using PersonalMoneyTracker.Core.Models;
-using PersonalMoneyTracker.Dtos;
 
 namespace PersonalMoneyTracker
 {
@@ -8,8 +6,7 @@ namespace PersonalMoneyTracker
     {
         public AutoMapper()
         {
-            CreateMap<UserRegisterDto, User>()
-                .ForMember(dst => dst.PasswordHash, opt => opt.MapFrom(src => src.Password));
+            
         }
     }
 }
