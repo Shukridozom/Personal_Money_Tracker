@@ -69,6 +69,14 @@ namespace PersonalMoneyTracker.Controllers
             return Created(new Uri(Request.GetDisplayUrl() + "/" + user.Id), null);
         }
 
+        [HttpPost("/api/logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return NoContent();
+        }
+
+
         private string HashPassword(string password)
         {
             string hash;
