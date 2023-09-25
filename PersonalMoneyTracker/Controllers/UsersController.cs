@@ -41,8 +41,8 @@ namespace PersonalMoneyTracker.Controllers
                 return BadRequest("Username or password is incorrect");
 
             var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-            claims.Add(new Claim(ClaimTypes.Name, user.Username));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, userFromDb.Id.ToString()));
+            claims.Add(new Claim(ClaimTypes.Name, userFromDb.Username));
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
 
