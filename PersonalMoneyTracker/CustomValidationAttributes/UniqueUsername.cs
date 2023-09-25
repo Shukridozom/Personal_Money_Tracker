@@ -1,5 +1,6 @@
 ﻿using PersonalMoneyTracker.Core.Models;
 using PersonalMoneyTracker.Core.Repositories;
+using PersonalMoneyTracker.Dtos;
 using PersonalMoneyTracker.Persistence;
 using System.ComponentModel.DataAnnotations;
 
@@ -12,7 +13,7 @@ namespace PersonalMoneyTracker.CustomValidationAttributes
             User username;
             using (var context = new AppDbContext())
             {
-                username = context.Users.SingleOrDefault(u => u.Username == (string)validationContext.ObjectInstance);
+                username = context.Users.SingleOrDefault(u => u.Username == ((UserRegisterDto)validationContext.ObjectInstance).Username);
             }
 
             if (username == null)
