@@ -77,8 +77,11 @@ namespace PersonalMoneyTracker.Controllers
             _uintOfWork.Users.Add(user);
             _uintOfWork.Complete();
 
-            return Created(new Uri(Request.GetDisplayUrl() + "/" + user.Id), null);
+            var userInfo = _mapper.Map<User, UserDto>(user);
+
+            return CreatedAtAction(nameof(Get), new { id = user.Id }, userInfo);
         }
+
 
         [HttpPost("/api/logout")]
         public async Task<IActionResult> Logout()
