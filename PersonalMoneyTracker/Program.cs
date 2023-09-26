@@ -14,7 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork>(s => new UnitOfWork(new AppDbContext()));
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(x => { x.LoginPath = "/login"; });
+    .AddCookie(x => { x.LoginPath = "/api/login"; });
 
 var app = builder.Build();
 
