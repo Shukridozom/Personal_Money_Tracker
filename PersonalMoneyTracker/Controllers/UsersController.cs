@@ -77,6 +77,9 @@ namespace PersonalMoneyTracker.Controllers
             _uintOfWork.Users.Add(user);
             _uintOfWork.Complete();
 
+            AddDefaultWalletsToUser(user.Id);
+            AddDefaultTransactionCategoriesToUser(user.Id);
+
             var userInfo = _mapper.Map<User, UserDto>(user);
 
             return CreatedAtAction(nameof(Get), new { id = user.Id }, userInfo);
@@ -103,6 +106,60 @@ namespace PersonalMoneyTracker.Controllers
             }
 
             return hash;
+        }
+
+        private void AddDefaultWalletsToUser(int id)
+        {
+            List<string> walletNames = new List<string>()
+            {
+                "Payment Card",
+                "Cash"
+            };
+
+            foreach(var wallet in walletNames)
+                _uintOfWork.Wallets.Add(new Wallet()
+                {
+                    UserId = id,
+                    Name = wallet
+                });
+
+            _uintOfWork.Complete();
+        }
+
+        private void AddDefaultTransactionCategoriesToUser(int id)
+        {
+            List<string> paymentCategoriesNames = new List<string>()
+            {
+                "House",
+                "Food",
+                "Transport",
+                "Health",
+                "Communications"
+            };
+
+            List<string> incomeCategoriesNames = new List<string>()
+            {
+                "Salary",
+                "Savings"
+            };
+
+            foreach(var category in paymentCategoriesNames)
+                _uintOfWork.TransactionCategories.Add(new TransactionCategory()
+                {
+                    UserId = id,
+                    TransactionTypeId = 2, // Payment
+                    Name = category
+                });
+
+            foreach (var category in incomeCategoriesNames)
+                _uintOfWork.TransactionCategories.Add(new TransactionCategory()
+                {
+                    UserId = id,
+                    TransactionTypeId = 1, // Income
+                    Name = category
+                });
+
+            _uintOfWork.Complete();
         }
     }
 }
