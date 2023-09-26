@@ -27,6 +27,17 @@ namespace PersonalMoneyTracker.Controllers
             _uintOfWork = uintOfWork;
         }
 
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var user = _uintOfWork.Users.Get(id);
+            if (user == null)
+                return NotFound();
+
+            return Ok(_mapper.Map<User, UserDto>(user));
+        }
+
         [HttpPost("/api/login")]
         public async Task<IActionResult> Login(UserLoginDto userDto)
         {

@@ -9,10 +9,13 @@ namespace PersonalMoneyTracker
         public AutoMapper()
         {
             CreateMap<UserRegisterDto, User>();
+            CreateMap<User, UserRegisterDto>();
 
             CreateMap<UserLoginDto, User>();
-
             CreateMap<User, UserLoginDto>();
+
+            CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
 
         }
     }
