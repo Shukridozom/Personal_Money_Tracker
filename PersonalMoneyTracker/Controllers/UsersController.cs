@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -93,7 +94,19 @@ namespace PersonalMoneyTracker.Controllers
             return NoContent();
         }
 
+        [Authorize]
+        [HttpPut("changepassword")]
+        public IActionResult ChangePassword(UserChangePasswordDto userDto)
+        {
+            var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            var userId = Int32.Parse(claim.Value);
 
+            var user = _uintOfWork.Users.Get(userId);
+            user.PasswordHash = HashPassword(userDto.Password);
+            _uintOfWork.Complete();
+
+            return Ok();
+        }
         private string HashPassword(string password)
         {
             string hash;
