@@ -94,12 +94,37 @@ namespace PersonalMoneyTracker.Controllers
             return NoContent();
         }
 
+
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> Delete()
+        {
+            var userId = GetLoggedInUserId();
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            _uintOfWork.Transactions
+                .RemoveRange(_uintOfWork.Transactions.Find(t => t.UserId == userId));
+
+            _uintOfWork.TransactionCategories
+                .RemoveRange(_uintOfWork.TransactionCategories.Find(tc => tc.UserId == userId));
+
+            _uintOfWork.Wallets
+                .RemoveRange(_uintOfWork.Wallets.Find(w => w.UserId == userId));
+
+            _uintOfWork.Users
+                .Remove(_uintOfWork.Users.Get(userId));
+
+
+            return Ok();
+        }
+
         [Authorize]
         [HttpPut("changepassword")]
         public IActionResult ChangePassword(UserChangePasswordDto userDto)
         {
-            var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            var userId = Int32.Parse(claim.Value);
+            var userId = GetLoggedInUserId();
 
             var user = _uintOfWork.Users.Get(userId);
             user.PasswordHash = HashPassword(userDto.Password);
@@ -173,6 +198,12 @@ namespace PersonalMoneyTracker.Controllers
                 });
 
             _uintOfWork.Complete();
+        }
+
+        private int GetLoggedInUserId()
+        {
+            var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            return Int32.Parse(claim.Value);
         }
     }
 }
