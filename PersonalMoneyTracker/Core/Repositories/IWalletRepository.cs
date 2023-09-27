@@ -5,5 +5,6 @@ namespace PersonalMoneyTracker.Core.Repositories
 {
     public interface IWalletRepository : IRepository<Wallet>
     {
+        IEnumerable<Wallet> GetUserWallets(int userId);
     }
 }
