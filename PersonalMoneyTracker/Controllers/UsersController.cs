@@ -104,18 +104,7 @@ namespace PersonalMoneyTracker.Controllers
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            _uintOfWork.Transactions
-                .RemoveRange(_uintOfWork.Transactions.Find(t => t.UserId == userId));
-
-            _uintOfWork.TransactionCategories
-                .RemoveRange(_uintOfWork.TransactionCategories.Find(tc => tc.UserId == userId));
-
-            _uintOfWork.Wallets
-                .RemoveRange(_uintOfWork.Wallets.Find(w => w.UserId == userId));
-
-            _uintOfWork.Users
-                .Remove(_uintOfWork.Users.Get(userId));
-
+            _uintOfWork.Users.DeleteUser(userId);
             _uintOfWork.Complete();
 
             return Ok();
