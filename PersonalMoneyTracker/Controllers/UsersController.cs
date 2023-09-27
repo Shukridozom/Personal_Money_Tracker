@@ -116,6 +116,7 @@ namespace PersonalMoneyTracker.Controllers
             _uintOfWork.Users
                 .Remove(_uintOfWork.Users.Get(userId));
 
+            _uintOfWork.Complete();
 
             return Ok();
         }
