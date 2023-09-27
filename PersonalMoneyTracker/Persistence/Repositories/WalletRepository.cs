@@ -12,9 +12,9 @@ namespace PersonalMoneyTracker.Persistence.Repositories
 
         }
 
-        public IEnumerable<string> GetUserWalletsNames(int userId)
+        public IEnumerable<Wallet> GetUserWallets(int userId)
         {
-            return AppDbContext.Wallets.Where(w => w.UserId == userId).Select(w => w.Name).ToList();
+            return AppDbContext.Wallets.Where(w => w.UserId == userId).ToList();
         }
 
         public AppDbContext AppDbContext
