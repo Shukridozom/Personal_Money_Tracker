@@ -17,6 +17,10 @@ namespace PersonalMoneyTracker
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
 
+            CreateMap<Wallet, WalletDto>();
+            CreateMap<WalletDto, Wallet>()
+                .ForMember(m => m.Id, opt => opt.Ignore());
+
         }
     }
 }
