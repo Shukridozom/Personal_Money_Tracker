@@ -91,6 +91,30 @@ namespace PersonalMoneyTracker.Controllers
             return Ok(transactionCategoryDto);
         }
 
+        [HttpPost]
+        public IActionResult Post(TransactionCategoryDto transactionCategoryDto)
+        {
+            var userId = GetLoggedInUserId();
+
+            var transactionCategory = _mapper.Map<TransactionCategoryDto, TransactionCategory>(transactionCategoryDto);
+            transactionCategory.UserId = userId;
+
+            var transactionCategoryFromDb = _unitOfWork.TransactionCategories
+                .SingleOrDefault(tc => tc.UserId == userId 
+                && tc.Name == transactionCategory.Name
+                && tc.TransactionTypeId == transactionCategory.TransactionTypeId
+                );
+
+            if (transactionCategoryFromDb != null)
+                return BadRequest("You have another transaction category with the same name and Type");
+
+
+            _unitOfWork.TransactionCategories.Add(transactionCategory);
+            _unitOfWork.Complete();
+
+            return CreatedAtAction(nameof(Get), new { id = transactionCategory.Id }, transactionCategoryDto);
+        }
+
 
         private int GetLoggedInUserId()
         {
