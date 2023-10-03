@@ -88,7 +88,7 @@ namespace PersonalMoneyTracker.Controllers
 
             var transactionCategoryDto = _mapper.Map<TransactionCategory, TransactionCategoryDto>(transactionCategory);
 
-            return Ok(transactionCategory);
+            return Ok(transactionCategoryDto);
         }
 
 
