@@ -115,6 +115,33 @@ namespace PersonalMoneyTracker.Controllers
             return CreatedAtAction(nameof(Get), new { id = transactionCategory.Id }, transactionCategoryDto);
         }
 
+        [HttpPut("renameCategory")]
+        public IActionResult RenameCategory(int currentCategoryId, TransactionCategoryDto newTransactionCategory)
+        {
+            var userId = GetLoggedInUserId();
+
+            var CategoryFromDb = _unitOfWork.TransactionCategories
+                .SingleOrDefault(tc => tc.Id == currentCategoryId && tc.UserId == userId);
+
+            if (CategoryFromDb == null)
+                return BadRequest();
+
+            //check if the name is valid
+            var categoryWithSameName = _unitOfWork.TransactionCategories
+                .SingleOrDefault(tc => tc.UserId == userId 
+                && tc.Name == newTransactionCategory.Name
+                && tc.TransactionTypeId == CategoryFromDb.TransactionTypeId);
+            if (categoryWithSameName != null)
+                return BadRequest("You have another transaction category with the same name and Type");
+
+
+            CategoryFromDb.Name = newTransactionCategory.Name;
+
+            _unitOfWork.Complete();
+
+            return Ok();
+        }
+
 
         private int GetLoggedInUserId()
         {
