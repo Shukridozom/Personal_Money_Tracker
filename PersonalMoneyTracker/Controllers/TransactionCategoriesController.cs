@@ -143,6 +143,35 @@ namespace PersonalMoneyTracker.Controllers
         }
 
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var userId = GetLoggedInUserId();
+
+            var categoryWithTransactions = _unitOfWork.TransactionCategories
+                .GetTransactionCategoryWithTransactions(id);
+
+            var userCategoryKeysList = _unitOfWork.TransactionCategories
+                .GetUserTransactionCategories(userId)
+                .Select(tc => tc.Id)
+                .ToList();
+
+            if (!userCategoryKeysList.Contains(id)) // This category is not for this user
+                return BadRequest();
+
+            if (categoryWithTransactions == null)
+                return BadRequest();
+
+            if (categoryWithTransactions.Transactions == null)
+                return BadRequest("This category is not empty, delete its transactions or move them to another category before deleting it");
+
+            _unitOfWork.TransactionCategories.Remove(categoryWithTransactions);
+
+            _unitOfWork.Complete();
+
+            return Ok();
+        }
+
         private int GetLoggedInUserId()
         {
             var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);

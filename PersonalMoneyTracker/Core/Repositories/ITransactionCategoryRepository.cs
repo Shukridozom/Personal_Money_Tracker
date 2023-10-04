@@ -7,5 +7,6 @@ namespace PersonalMoneyTracker.Core.Repositories
         IEnumerable<TransactionCategory> GetUserTransactionCategories(int userId);
         IEnumerable<TransactionCategory> GetUserPaymentTransactionCategories(int userId);
         IEnumerable<TransactionCategory> GetUserIncomeTransactionCategories(int userId);
+        TransactionCategory GetTransactionCategoryWithTransactions(int id);
     }
 }

@@ -32,6 +32,13 @@ namespace PersonalMoneyTracker.Persistence.Repositories
                 .ToList();
         }
 
+        public TransactionCategory GetTransactionCategoryWithTransactions(int id)
+        {
+            return AppDbContext.TransactionCategories
+                .Include(tc => tc.Transactions)
+                .SingleOrDefault(tc => tc.Id == id);
+        }
+
         public AppDbContext AppDbContext
         {
             get
