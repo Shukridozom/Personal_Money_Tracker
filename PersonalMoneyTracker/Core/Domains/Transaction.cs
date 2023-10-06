@@ -12,8 +12,6 @@
         public Wallet Wallet { get; set; }
         public int TransactionCategoryId { get; set; }
         public TransactionCategory TransactionCategory { get; set; }
-        public TransactionType TransactionType { get; set; }
-        public int TransactionTypeId { get; set; }
 
     }
 }

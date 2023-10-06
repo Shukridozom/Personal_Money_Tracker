@@ -89,11 +89,6 @@ namespace PersonalMoneyTracker.Persistence
                 .Property(t => t.Name)
                 .HasMaxLength(64);
 
-            modelBuilder.Entity<TransactionType>()
-                .HasMany(tt => tt.Transactions)
-                .WithOne(t => t.TransactionType)
-                .HasForeignKey(t => t.TransactionTypeId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<TransactionType>()
                 .HasMany(tt => tt.TransactionCategories)
