@@ -21,9 +21,12 @@ namespace PersonalMoneyTracker
             CreateMap<WalletDto, Wallet>()
                 .ForMember(m => m.Id, opt => opt.Ignore());
 
-
             CreateMap<TransactionCategory, TransactionCategoryDto>();
             CreateMap<TransactionCategoryDto, TransactionCategory>()
+                .ForMember(m => m.Id, opt => opt.Ignore());
+
+            CreateMap<Transaction, TransactionDto>();
+            CreateMap<TransactionDto, Transaction>()
                 .ForMember(m => m.Id, opt => opt.Ignore());
 
         }
