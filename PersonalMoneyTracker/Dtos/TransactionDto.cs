@@ -1,4 +1,5 @@
 ﻿using PersonalMoneyTracker.Core.Models;
+using PersonalMoneyTracker.CustomValidationAttributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace PersonalMoneyTracker.Dtos
@@ -6,7 +7,8 @@ namespace PersonalMoneyTracker.Dtos
     public class TransactionDto
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+        [SetToCurrentDateTimeIfNull]
+        public DateTime? Date { get; set; }
         [Required]
         public double Amount { get; set; }
         public string? Reason { get; set; }
