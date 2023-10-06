@@ -61,6 +61,8 @@ namespace PersonalMoneyTracker.Controllers
             _unitOfWork.Transactions.Add(transaction);
             _unitOfWork.Complete();
 
+            transactionDto = _mapper.Map<Transaction,TransactionDto>(transaction);
+
             return CreatedAtAction(nameof(Get), new { id = transaction.Id }, transactionDto);
         }
 
@@ -74,7 +76,7 @@ namespace PersonalMoneyTracker.Controllers
             if (transactionFromDb == null)
                 return BadRequest();
 
-            transactionFromDb = _mapper.Map<TransactionDto, Transaction>(transactionDto);
+            _mapper.Map<TransactionDto, Transaction>(transactionDto,transactionFromDb);
             transactionFromDb.UserId = userId;
 
             _unitOfWork.Complete();
@@ -83,7 +85,7 @@ namespace PersonalMoneyTracker.Controllers
 
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             var userId = GetLoggedInUserId();
