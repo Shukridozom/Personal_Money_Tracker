@@ -13,6 +13,11 @@ namespace PersonalMoneyTracker.Persistence.Repositories
 
         }
 
+        public IEnumerable<Transaction> GetUserTransactions(int userId)
+        {
+            return AppDbContext.Transactions.Where(w => w.UserId == userId).ToList();
+        }
+
         public AppDbContext AppDbContext
         {
             get
