@@ -7,5 +7,7 @@ namespace PersonalMoneyTracker.Core.Repositories
     {
         IEnumerable<Wallet> GetUserWallets(int userId);
         Wallet GetWalletWithTransactions(int walletId);
+
+        IEnumerable<int> GetUserWalletIds(int userId);
     }
 }

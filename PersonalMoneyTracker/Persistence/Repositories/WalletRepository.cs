@@ -21,6 +21,14 @@ namespace PersonalMoneyTracker.Persistence.Repositories
         {
             return AppDbContext.Wallets.Include(w => w.Transactions).SingleOrDefault(w => w.Id == walletId);
         }
+
+        public IEnumerable<int> GetUserWalletIds(int userId)
+        {
+            return AppDbContext.Wallets
+                    .Where(w => w.UserId == userId)
+                    .Select(w => w.Id)
+                    .ToList();
+        }
         public AppDbContext AppDbContext
         {
             get

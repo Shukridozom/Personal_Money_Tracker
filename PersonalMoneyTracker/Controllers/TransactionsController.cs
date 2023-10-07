@@ -58,21 +58,16 @@ namespace PersonalMoneyTracker.Controllers
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
             transaction.UserId = userId;
 
-            var walletKeys = _unitOfWork.Wallets
-                .Find(w => w.UserId == userId)
-                .Select(w => w.Id)
-                .ToList();
-
+            var walletKeys = _unitOfWork.Wallets.GetUserWalletIds(userId);
             var transactionCategoryKeys = _unitOfWork.TransactionCategories
-                .Find(tc => tc.UserId == userId)
-                .Select(tc => tc.Id)
-                .ToList();
+                .GetUserTransactionCategoryIds(userId);
 
             if (!walletKeys.Contains(transactionDto.WalletId))
                 return BadRequest("Unavailable walletId");
 
             if (!transactionCategoryKeys.Contains(transactionDto.TransactionCategoryId))
                 return BadRequest("Unavailable transactionCategoryId");
+
 
             _unitOfWork.Transactions.Add(transaction);
             _unitOfWork.Complete();
@@ -92,15 +87,9 @@ namespace PersonalMoneyTracker.Controllers
             if (transactionFromDb == null)
                 return BadRequest();
 
-            var walletKeys = _unitOfWork.Wallets
-                .Find(w => w.UserId == userId)
-                .Select(w => w.Id)
-                .ToList();
-
+            var walletKeys = _unitOfWork.Wallets.GetUserWalletIds(userId);
             var transactionCategoryKeys = _unitOfWork.TransactionCategories
-                .Find(tc => tc.UserId == userId)
-                .Select(tc => tc.Id)
-                .ToList();
+                .GetUserTransactionCategoryIds(userId);
 
             if (!walletKeys.Contains(transactionDto.WalletId))
                 return BadRequest("Unavailable walletId");
@@ -140,6 +129,7 @@ namespace PersonalMoneyTracker.Controllers
             var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
             return Int32.Parse(claim.Value);
         }
+
     }
 
 

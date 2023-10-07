@@ -39,6 +39,14 @@ namespace PersonalMoneyTracker.Persistence.Repositories
                 .SingleOrDefault(tc => tc.Id == id);
         }
 
+        public IEnumerable<int> GetUserTransactionCategoryIds(int userId)
+        {
+            return AppDbContext.TransactionCategories
+                    .Where(tc => tc.UserId == userId)
+                    .Select(tc => tc.Id)
+                    .ToList();
+        }
+
         public AppDbContext AppDbContext
         {
             get

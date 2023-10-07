@@ -105,9 +105,7 @@ namespace PersonalMoneyTracker.Controllers
                 .GetWalletWithTransactions(id);
 
             var userWalletKeysList = _unitOfWork.Wallets
-                .GetUserWallets(userId)
-                .Select(w => w.Id)
-                .ToList();
+                .GetUserWalletIds(userId);
 
             if (!userWalletKeysList.Contains(id)) // This wallet is not for this user
                 return BadRequest();

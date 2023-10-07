@@ -152,9 +152,7 @@ namespace PersonalMoneyTracker.Controllers
                 .GetTransactionCategoryWithTransactions(id);
 
             var userCategoryKeysList = _unitOfWork.TransactionCategories
-                .GetUserTransactionCategories(userId)
-                .Select(tc => tc.Id)
-                .ToList();
+                .GetUserTransactionCategoryIds(userId);
 
             if (!userCategoryKeysList.Contains(id)) // This category is not for this user
                 return BadRequest();
