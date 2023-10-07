@@ -58,10 +58,26 @@ namespace PersonalMoneyTracker.Controllers
             var transaction = _mapper.Map<TransactionDto, Transaction>(transactionDto);
             transaction.UserId = userId;
 
+            var walletKeys = _unitOfWork.Wallets
+                .Find(w => w.UserId == userId)
+                .Select(w => w.Id)
+                .ToList();
+
+            var transactionCategoryKeys = _unitOfWork.TransactionCategories
+                .Find(tc => tc.UserId == userId)
+                .Select(tc => tc.Id)
+                .ToList();
+
+            if (!walletKeys.Contains(transactionDto.WalletId))
+                return BadRequest("Unavailable walletId");
+
+            if (!transactionCategoryKeys.Contains(transactionDto.TransactionCategoryId))
+                return BadRequest("Unavailable transactionCategoryId");
+
             _unitOfWork.Transactions.Add(transaction);
             _unitOfWork.Complete();
 
-            transactionDto = _mapper.Map<Transaction,TransactionDto>(transaction);
+            _mapper.Map(transaction, transactionDto);
 
             return CreatedAtAction(nameof(Get), new { id = transaction.Id }, transactionDto);
         }
