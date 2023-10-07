@@ -115,7 +115,7 @@ namespace PersonalMoneyTracker.Controllers
             var userId = GetLoggedInUserId();
             var walletKeys = _unitOfWork.Wallets.GetUserWalletIds(userId);
 
-            if (!(walletKeys.Contains(sourceWalletId) || walletKeys.Contains(destinationWalletId)))
+            if (!walletKeys.Contains(sourceWalletId) || !walletKeys.Contains(destinationWalletId))
                 return BadRequest("Unavailable wallet");
 
             var transactions = _unitOfWork.Transactions
@@ -139,7 +139,7 @@ namespace PersonalMoneyTracker.Controllers
 
             var categoryKeys = _unitOfWork.TransactionCategories.GetUserTransactionCategoryIds(userId);
 
-            if (!(categoryKeys.Contains(sourceCategoryId) || categoryKeys.Contains(destinationCategoryId)))
+            if (!categoryKeys.Contains(sourceCategoryId) || !categoryKeys.Contains(destinationCategoryId))
                 return BadRequest("Unavailable Category");
 
             var sourceCategory = _unitOfWork.TransactionCategories.Get(sourceCategoryId);
