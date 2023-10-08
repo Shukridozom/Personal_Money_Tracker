@@ -123,6 +123,33 @@ namespace PersonalMoneyTracker.Controllers
             return Ok();
         }
 
+        [HttpGet("GetWalletCarryOver")]
+        public IActionResult GetWalletCarryOver(int walletId, DateTime day)
+        {
+            var userId = GetLoggedInUserId();
+            var walletKeys = _unitOfWork.Wallets.GetUserWalletIds(userId);
+
+            if (!walletKeys.Contains(walletId))
+                return NotFound();
+
+            var carryOver = _unitOfWork.Wallets.GetWalletCarryOver(walletId, day.Date);
+
+            return Ok(carryOver);
+        }
+
+        [HttpGet("GetWalletBalance")]
+        public IActionResult GetWalletBalance(int walletId)
+        {
+            var userId = GetLoggedInUserId();
+            var walletKeys = _unitOfWork.Wallets.GetUserWalletIds(userId);
+
+            if (!walletKeys.Contains(walletId))
+                return NotFound();
+
+            var balance = _unitOfWork.Wallets.GetWalletBalance(walletId);
+
+            return Ok(balance);
+        }
         private int GetLoggedInUserId()
         {
             var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);

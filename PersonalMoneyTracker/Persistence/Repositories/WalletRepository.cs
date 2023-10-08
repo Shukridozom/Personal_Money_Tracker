@@ -29,6 +29,44 @@ namespace PersonalMoneyTracker.Persistence.Repositories
                     .Select(w => w.Id)
                     .ToList();
         }
+        public double GetWalletCarryOver(int walletId, DateTime day)
+        {
+            double carryOver = 0;
+            var transactions = AppDbContext.Transactions.
+                Include(t => t.TransactionCategory)
+                .Where(t => t.WalletId == walletId && t.Date < day.Date)
+                .ToList();
+
+            foreach(var t in transactions)
+            {
+                if (t.TransactionCategory.TransactionTypeId == 1) // Income
+                    carryOver += t.Amount;
+                else // Payment
+                    carryOver -= t.Amount;
+            }
+
+            return carryOver;
+        }
+
+        public double GetWalletBalance(int walletId)
+        {
+            double balance = 0;
+            var transactions = AppDbContext.Transactions.
+                Include(t => t.TransactionCategory)
+                .Where(t => t.WalletId == walletId)
+                .ToList();
+
+            foreach (var t in transactions)
+            {
+                if (t.TransactionCategory.TransactionTypeId == 1) // Income
+                    balance += t.Amount;
+                else // Payment
+                    balance -= t.Amount;
+            }
+
+            return balance;
+        }
+
         public AppDbContext AppDbContext
         {
             get

@@ -9,5 +9,9 @@ namespace PersonalMoneyTracker.Core.Repositories
         Wallet GetWalletWithTransactions(int walletId);
 
         IEnumerable<int> GetUserWalletIds(int userId);
+
+        double GetWalletCarryOver(int walletId, DateTime day);
+
+        double GetWalletBalance(int walletId);
     }
 }
