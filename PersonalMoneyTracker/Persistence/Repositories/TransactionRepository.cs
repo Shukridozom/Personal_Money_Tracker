@@ -18,6 +18,44 @@ namespace PersonalMoneyTracker.Persistence.Repositories
             return AppDbContext.Transactions.Where(w => w.UserId == userId).ToList();
         }
 
+        public double GetTransactionsCarryOver(int userId, DateTime day)
+        {
+            double carryOver = 0;
+            var transactions = AppDbContext.Transactions.
+                Include(t => t.TransactionCategory)
+                .Where(t => t.UserId == userId && t.Date < day.Date)
+                .ToList();
+
+            foreach (var t in transactions)
+            {
+                if (t.TransactionCategory.TransactionTypeId == 1) // Income
+                    carryOver += t.Amount;
+                else // Payment
+                    carryOver -= t.Amount;
+            }
+
+            return carryOver;
+        }
+
+        public double GetTransactionsBalance(int userId)
+        {
+            double balance = 0;
+            var transactions = AppDbContext.Transactions.
+                Include(t => t.TransactionCategory)
+                .Where(t => t.UserId == userId)
+                .ToList();
+
+            foreach (var t in transactions)
+            {
+                if (t.TransactionCategory.TransactionTypeId == 1) // Income
+                    balance += t.Amount;
+                else // Payment
+                    balance -= t.Amount;
+            }
+
+            return balance;
+        }
+
         public AppDbContext AppDbContext
         {
             get

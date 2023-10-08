@@ -216,6 +216,23 @@ namespace PersonalMoneyTracker.Controllers
 
         }
 
+        [HttpGet("GetTransactionsCarryOver")]
+        public IActionResult GetTransactionsCarryOver(DateTime day)
+        {
+            var userId = GetLoggedInUserId();
+            var carryOver = _unitOfWork.Transactions.GetTransactionsCarryOver(userId, day.Date);
+
+            return Ok(carryOver);
+        }
+
+        [HttpGet("GetTransactionsBalance")]
+        public IActionResult GetTransactionsBalance()
+        {
+            var userId = GetLoggedInUserId();
+            var balance = _unitOfWork.Transactions.GetTransactionsBalance(userId);
+
+            return Ok(balance);
+        }
 
         private int GetLoggedInUserId()
         {
