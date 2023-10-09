@@ -234,6 +234,22 @@ namespace PersonalMoneyTracker.Controllers
             return Ok(balance);
         }
 
+        [HttpGet("GetTransactionsBetweenTwoDays")]
+        public IActionResult GetTransactionsBetweenTwoDays(DateTime from, DateTime to)
+        {
+            var userId = GetLoggedInUserId();
+
+            var transactions = _unitOfWork.Transactions
+                .GetTransactionsBetweenTwoDays(userId, from.Date, to.Date);
+
+            List<TransactionDto> transactionDtos = new List<TransactionDto>();
+            foreach (var t in transactions)
+                transactionDtos.Add(_mapper.Map<Transaction, TransactionDto>(t));
+
+            return Ok(transactionDtos);
+
+        }
+
         private int GetLoggedInUserId()
         {
             var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);

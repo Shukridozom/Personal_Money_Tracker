@@ -56,6 +56,16 @@ namespace PersonalMoneyTracker.Persistence.Repositories
             return balance;
         }
 
+        public IEnumerable<Transaction> GetTransactionsBetweenTwoDays(int userId, DateTime from, DateTime to)
+        {
+            from = from.Date;
+            to = to.Date;
+
+            return AppDbContext.Transactions
+                .Where(t => t.UserId == userId && t.Date >= from && t.Date <= to)
+                .ToList();
+        }
+
         public AppDbContext AppDbContext
         {
             get

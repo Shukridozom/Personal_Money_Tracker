@@ -9,5 +9,6 @@ namespace PersonalMoneyTracker.Core.Repositories
         double GetTransactionsCarryOver(int userId, DateTime day);
 
         double GetTransactionsBalance(int userId);
+        IEnumerable<Transaction> GetTransactionsBetweenTwoDays(int userId, DateTime from, DateTime to);
     }
 }
