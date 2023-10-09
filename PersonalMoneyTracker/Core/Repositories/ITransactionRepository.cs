@@ -10,5 +10,7 @@ namespace PersonalMoneyTracker.Core.Repositories
 
         double GetTransactionsBalance(int userId);
         IEnumerable<Transaction> GetTransactionsBetweenTwoDays(int userId, DateTime from, DateTime to);
+        IEnumerable<Transaction> GetWalletTransactions(int walletId);
+        IEnumerable<Transaction> GetWalletTransactionsBetweenTwoDays(int walletId, DateTime from, DateTime to);
     }
 }

@@ -150,6 +150,42 @@ namespace PersonalMoneyTracker.Controllers
 
             return Ok(balance);
         }
+
+        [HttpGet("GetWalletTransactions")]
+        public IActionResult GetWalletTransactions(int walletId)
+        {
+            var userId = GetLoggedInUserId();
+            var walletKeys = _unitOfWork.Wallets.GetUserWalletIds(userId);
+            if (!walletKeys.Contains(walletId))
+                return NotFound("Unavailable wallet");
+
+            var transactions = _unitOfWork.Transactions.GetWalletTransactions(walletId);
+            var transactionDtos = new List<TransactionDto>();
+
+            foreach (var t in transactions)
+                transactionDtos.Add(_mapper.Map<Transaction, TransactionDto>(t));
+
+            return Ok(transactionDtos);
+        }
+
+        [HttpGet("GetWalletTransactionsBetweenTwoDays")]
+        public IActionResult GetWalletTransactionsBetweenTwoDays(int walletId, DateTime from, DateTime to)
+        {
+            var userId = GetLoggedInUserId();
+            var walletKeys = _unitOfWork.Wallets.GetUserWalletIds(userId);
+
+            if (!walletKeys.Contains(walletId))
+                return NotFound("Unavailable wallet");
+
+            var transactions = _unitOfWork.Transactions
+                .GetWalletTransactionsBetweenTwoDays(walletId, from.Date, to.Date);
+
+            var transactionDtos = new List<TransactionDto>();
+            foreach(var t in transactions)
+                transactionDtos.Add(_mapper.Map<Transaction, TransactionDto>(t));
+
+            return Ok(transactionDtos);
+        }
         private int GetLoggedInUserId()
         {
             var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);

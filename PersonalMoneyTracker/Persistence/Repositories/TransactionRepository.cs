@@ -66,6 +66,23 @@ namespace PersonalMoneyTracker.Persistence.Repositories
                 .ToList();
         }
 
+        public IEnumerable<Transaction> GetWalletTransactions(int walletId)
+        {
+            return AppDbContext.Transactions
+                .Where(t => t.WalletId == walletId)
+                .ToList();
+        }
+
+        public IEnumerable<Transaction> GetWalletTransactionsBetweenTwoDays(int walletId, DateTime from, DateTime to)
+        {
+            from = from.Date;
+            to = to.Date;
+
+            return AppDbContext.Transactions
+                .Where(t => t.WalletId == walletId && t.Date >= from && t.Date <= to)
+                .ToList();
+        }
+
         public AppDbContext AppDbContext
         {
             get
