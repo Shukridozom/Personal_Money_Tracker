@@ -14,7 +14,22 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork>(s => new UnitOfWork(new AppDbContext()));
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(x => { x.LoginPath = "/api/login"; });
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+    opt =>
+    {
+
+        opt.Events.OnRedirectToLogin = ctx =>
+        {
+            ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        };
+        opt.Events.OnRedirectToAccessDenied = ctx =>
+        {
+            ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return Task.CompletedTask;
+        };
+
+    });
 
 var app = builder.Build();
 
