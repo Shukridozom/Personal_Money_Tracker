@@ -34,12 +34,20 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+#region Running a query for kicking off EF Core warm up routine [mapping entites to DB tables]:
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var uintOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+    uintOfWork.Users.Get(-1);
 }
+#endregion
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 
 app.UseHttpsRedirection();
 
