@@ -247,12 +247,6 @@ namespace PersonalMoneyTracker.Controllers
 
         }
 
-        private int GetLoggedInUserId()
-        {
-            var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            return Int32.Parse(claim.Value);
-        }
-
     }
 
 
