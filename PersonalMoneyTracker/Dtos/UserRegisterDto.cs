@@ -8,7 +8,6 @@ namespace PersonalMoneyTracker.Dtos
     public class UserRegisterDto
     {
         [Required]
-        [UniqueUsername]
         [MinLength(6)]
         [MaxLength(255)]
         public string Username { get; set; }

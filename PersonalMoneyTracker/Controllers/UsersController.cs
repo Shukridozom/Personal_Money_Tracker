@@ -72,6 +72,11 @@ namespace PersonalMoneyTracker.Controllers
         public IActionResult Register(UserRegisterDto userDto)
         {
             var user = _mapper.Map<UserRegisterDto, User>(userDto);
+
+            var userFromDb = _uintOfWork.Users.SingleOrDefault(u => u.Username == userDto.Username);
+            if (userFromDb != null)
+                return BadRequest("Username already exists");
+
             user.PasswordHash = HashPassword(userDto.Password);
             user.RegisterDate = DateTime.Now;
 
