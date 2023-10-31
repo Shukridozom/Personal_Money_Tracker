@@ -5,6 +5,7 @@ namespace PersonalMoneyTracker.Persistence
 {
     public class AppDbContext : DbContext
     {
+        private readonly IConfiguration _config;
 
         public DbSet<User> Users { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
@@ -13,11 +14,12 @@ namespace PersonalMoneyTracker.Persistence
         public DbSet<TransactionType> TransactionTypes { get; set; }
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration config)
+            : base(options)
         {
-            var connectionString = @"Server=localhost;Port=3306;Database=Personal_Money_Tracker;Uid=root;Pwd=testpassword;";
-            optionsBuilder.UseMySQL(connectionString);
+            _config = config;
         }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
