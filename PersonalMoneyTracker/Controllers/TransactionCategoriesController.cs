@@ -79,7 +79,7 @@ namespace PersonalMoneyTracker.Controllers
             var transactionCategory = _unitOfWork
                 .TransactionCategories.Get(id);
 
-            if (transactionCategory == null || transactionCategory.UserId != userId)
+            if (transactionCategory == null || transactionCategory?.UserId != userId)
                 return NotFound();
 
             var transactionCategoryDto = _mapper.Map<TransactionCategory, TransactionCategoryDto>(transactionCategory);
