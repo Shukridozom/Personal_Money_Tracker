@@ -12,16 +12,13 @@ namespace PersonalMoneyTracker.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class TransactionsController : ControllerBase
+    public class TransactionsController : AppBaseController
     {
-        private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
-        public TransactionsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public TransactionsController(IMapper mapper, IUnitOfWork unitOfWork)
+            :base(mapper, unitOfWork)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
 
+        }
 
         [HttpGet]
         public IActionResult Get()
@@ -248,12 +245,6 @@ namespace PersonalMoneyTracker.Controllers
 
             return Ok(transactionDtos);
 
-        }
-
-        private int GetLoggedInUserId()
-        {
-            var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            return Int32.Parse(claim.Value);
         }
 
     }

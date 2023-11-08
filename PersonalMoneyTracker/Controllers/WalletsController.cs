@@ -13,15 +13,12 @@ namespace PersonalMoneyTracker.Controllers
     [ApiController]
     [Authorize]
 
-    public class WalletsController : ControllerBase
+    public class WalletsController : AppBaseController
     {
-        private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public WalletsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public WalletsController(IMapper mapper, IUnitOfWork unitOfWork)
+            :base(mapper, unitOfWork)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+
         }
 
         [HttpGet]
@@ -185,11 +182,6 @@ namespace PersonalMoneyTracker.Controllers
                 transactionDtos.Add(_mapper.Map<Transaction, TransactionDto>(t));
 
             return Ok(transactionDtos);
-        }
-        private int GetLoggedInUserId()
-        {
-            var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            return Int32.Parse(claim.Value);
         }
     }
 }

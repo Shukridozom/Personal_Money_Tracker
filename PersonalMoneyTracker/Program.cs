@@ -11,19 +11,43 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IUnitOfWork>(s => new UnitOfWork(new AppDbContext()));
+builder.Services.AddAppContext(builder.Configuration);
+
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(x => { x.LoginPath = "/api/login"; });
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+    opt =>
+    {
+
+        opt.Events.OnRedirectToLogin = ctx =>
+        {
+            ctx.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        };
+        opt.Events.OnRedirectToAccessDenied = ctx =>
+        {
+            ctx.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return Task.CompletedTask;
+        };
+
+    });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+#region Running a query for kicking off EF Core warm up routine [mapping entites to DB tables]:
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var uintOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+    uintOfWork.Users.Get(-1);
 }
+#endregion
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
 
 app.UseHttpsRedirection();
 

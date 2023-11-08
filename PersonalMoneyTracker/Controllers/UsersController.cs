@@ -17,22 +17,18 @@ namespace PersonalMoneyTracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : AppBaseController
     {
-        private readonly IMapper _mapper;
-        private readonly IUnitOfWork _uintOfWork;
-
-        public UsersController(IMapper mapper, IUnitOfWork uintOfWork)
+        public UsersController(IMapper mapper, IUnitOfWork unitOfWork)
+            :base(mapper, unitOfWork)
         {
-            _mapper = mapper;
-            _uintOfWork = uintOfWork;
-        }
 
+        }
 
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var user = _uintOfWork.Users.Get(id);
+            var user = _unitOfWork.Users.Get(id);
             if (user == null)
                 return NotFound();
 
@@ -45,7 +41,7 @@ namespace PersonalMoneyTracker.Controllers
             var user = _mapper.Map<UserLoginDto, User>(userDto);
             user.PasswordHash = HashPassword(userDto.Password);
             
-            var userFromDb = _uintOfWork.Users.SingleOrDefault(u => u.Username == userDto.Username);
+            var userFromDb = _unitOfWork.Users.SingleOrDefault(u => u.Username == userDto.Username);
             if (userFromDb == null)
                 return BadRequest("Username or password is incorrect");
 
@@ -72,11 +68,16 @@ namespace PersonalMoneyTracker.Controllers
         public IActionResult Register(UserRegisterDto userDto)
         {
             var user = _mapper.Map<UserRegisterDto, User>(userDto);
+
+            var userFromDb = _unitOfWork.Users.SingleOrDefault(u => u.Username == userDto.Username);
+            if (userFromDb != null)
+                return BadRequest("Username already exists");
+
             user.PasswordHash = HashPassword(userDto.Password);
             user.RegisterDate = DateTime.Now;
 
-            _uintOfWork.Users.Add(user);
-            _uintOfWork.Complete();
+            _unitOfWork.Users.Add(user);
+            _unitOfWork.Complete();
 
             AddDefaultWalletsToUser(user.Id);
             AddDefaultTransactionCategoriesToUser(user.Id);
@@ -104,8 +105,8 @@ namespace PersonalMoneyTracker.Controllers
 
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            _uintOfWork.Users.DeleteUser(userId);
-            _uintOfWork.Complete();
+            _unitOfWork.Users.DeleteUser(userId);
+            _unitOfWork.Complete();
 
             return Ok();
         }
@@ -116,9 +117,9 @@ namespace PersonalMoneyTracker.Controllers
         {
             var userId = GetLoggedInUserId();
 
-            var user = _uintOfWork.Users.Get(userId);
+            var user = _unitOfWork.Users.Get(userId);
             user.PasswordHash = HashPassword(userDto.Password);
-            _uintOfWork.Complete();
+            _unitOfWork.Complete();
 
             return Ok();
         }
@@ -145,13 +146,13 @@ namespace PersonalMoneyTracker.Controllers
             };
 
             foreach(var wallet in walletNames)
-                _uintOfWork.Wallets.Add(new Wallet()
+                _unitOfWork.Wallets.Add(new Wallet()
                 {
                     UserId = id,
                     Name = wallet
                 });
 
-            _uintOfWork.Complete();
+            _unitOfWork.Complete();
         }
 
         private void AddDefaultTransactionCategoriesToUser(int id)
@@ -172,7 +173,7 @@ namespace PersonalMoneyTracker.Controllers
             };
 
             foreach(var category in paymentCategoriesNames)
-                _uintOfWork.TransactionCategories.Add(new TransactionCategory()
+                _unitOfWork.TransactionCategories.Add(new TransactionCategory()
                 {
                     UserId = id,
                     TransactionTypeId = 2, // Payment
@@ -180,20 +181,15 @@ namespace PersonalMoneyTracker.Controllers
                 });
 
             foreach (var category in incomeCategoriesNames)
-                _uintOfWork.TransactionCategories.Add(new TransactionCategory()
+                _unitOfWork.TransactionCategories.Add(new TransactionCategory()
                 {
                     UserId = id,
                     TransactionTypeId = 1, // Income
                     Name = category
                 });
 
-            _uintOfWork.Complete();
+            _unitOfWork.Complete();
         }
 
-        private int GetLoggedInUserId()
-        {
-            var claim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
-            return Int32.Parse(claim.Value);
-        }
     }
 }
